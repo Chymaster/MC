@@ -23,7 +23,7 @@ class Lattice:
         energy
         for i in len(self.grid)-1:
             for j in len(self.grid[0])-1:
-                if self.grid[i][j] = "A":
+                if self.grid[i][j] == "A":
                     #Energy if the vertex pair start with type A
                     if self.grid[i][j+1]=="A" or self.grid[i+1][j]=="A":
                         #aa pair for (vx,vy+1) and (vx+1,vy)
@@ -31,7 +31,7 @@ class Lattice:
                     elif self.grid[i][j+1]=="B" or self.grid[i+1][j]=="B":
                         #ab pair
                         energy += eps_ab
-                elif self.grid[i][j] = "B":
+                elif self.grid[i][j] == "B":
                     if self.grid[i][j+1]=="A" or self.grid[i+1][j]=="A":
                         #ba pair
                         energy += eps_ab
