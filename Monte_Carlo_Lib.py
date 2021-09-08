@@ -17,7 +17,7 @@ class Lattice:
         #Filled up with A,
         #Now turn some of them into B
         for i in range(len(all_particles)):
-            if np.random.random > rho:
+            if np.random.random() > rho:
                 all_particles[i] = "B"
     
     def energy(self,eps_aa,eps_ab,eps_bb):
