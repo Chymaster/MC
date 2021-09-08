@@ -21,7 +21,8 @@ class Latice:
             self.grid[x][y] = identity
             self.particles.append(Particle(x,y,identity))
 
-    def swap(self):
+    def swap(self,x,y,target_x,target_y):
+        self.grid[x][y]
         
 
 
