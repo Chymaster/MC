@@ -1,3 +1,6 @@
 This is the Monte Carlo code
 
-<h3>Class Particle </h3>
+Class Particles(x,y,identity="a"):
+  self.p (position)
+  self.identity (identity ("a" or "b")
+  
