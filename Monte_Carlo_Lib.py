@@ -7,7 +7,7 @@ class Particle:
         self.p = np.array((x,y))
         self.identity = identity
 
-class Latice:
+class Lattice:
     def __init__(self,nx):
         # Lattice.grid generates an array of size nx by nx
         self.grid = np.zeros((nx,nx),str)
