@@ -19,11 +19,17 @@ class Lattice:
         for i in range(len(all_particles)):
             if np.random.random() > rho:
                 all_particles[i] = "B"
+
+        while len(all_particles) > 0:
+            #To add the all_particles to the gridß
+
+    def map(self):
+        print(self.all_particles)
     
     def energy(self,eps_aa,eps_ab,eps_bb):
         energy = 0
         for i in range(len(self.grid)-1):
-            for j in range(len(self.grid[0]))-1:
+            for j in range(len(self.grid[0])-1):
                 if self.grid[i][j] == "A":
                     #Energy if the vertex pair start with type A
                     if self.grid[i][j+1]=="A" or self.grid[i+1][j]=="A":
