@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-#Hello
+
+
 class Lattice:
-    def __init__(self,nx,rho,fa):
+    def __init__(self, nx, rho, fa):
         #nx is for  Lattice.grid generates an array of size nx by nx
         #rho is the density of particles 
         #fa is fraction of particles that's type "A"
@@ -20,9 +21,9 @@ class Lattice:
                 all_particles[i] = "B"
     
     def energy(self,eps_aa,eps_ab,eps_bb):
-        energy
-        for i in len(self.grid)-1:
-            for j in len(self.grid[0])-1:
+        energy = 0
+        for i in range(len(self.grid)-1):
+            for j in range(len(self.grid[0]))-1:
                 if self.grid[i][j] == "A":
                     #Energy if the vertex pair start with type A
                     if self.grid[i][j+1]=="A" or self.grid[i+1][j]=="A":
