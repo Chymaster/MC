@@ -30,6 +30,7 @@ class Lattice:
 
 
 
+
     def map(self):
         import matplotlib.patches as mpatches
         import matplotlib.pyplot as plt
@@ -37,7 +38,6 @@ class Lattice:
         im = plt.imshow(self.grid)
         colors = [im.cmap(im.norm(value)) for value in [0,1,2]]
         patches = [mpatches.Patch(color=colors[0], label="Empty".format(l=0)), mpatches.Patch(color=colors[1], label="Particle A".format(l=1)),mpatches.Patch(color=colors[2], label="Particle B".format(l=2))]
-
         plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
         plt.show()
@@ -63,3 +63,9 @@ class Lattice:
                         energy += eps_bb
         return energy
 
+    def swap(self):
+        occupied = False
+        while not occupied:
+            position = np.random.randint(0,self.grid_size,size=(1,2))
+            if self.grid[position[0]][position[1]] != 0:
+                occupied = True
