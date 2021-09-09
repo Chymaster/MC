@@ -20,8 +20,6 @@ class Lattice:
             if np.random.random() > rho:
                 all_particles[i] = "B"
 
-        while len(all_particles) > 0:
-            #To add the all_particles to the gridß
 
     def map(self):
         print(self.all_particles)
