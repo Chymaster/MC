@@ -11,18 +11,31 @@ class Lattice:
         #Generating empty grid
         self.grid = np.zeros((nx,nx),str)
         self.grid_size = nx
+        ptc_n = int(rho*(nx**2)) #number of particles
 
-        #Now filling the particles in
-        all_particles = np.full(int(rho*(nx**2)),'A')
+        #Generate a list of particles
+        all_particles = np.full(ptc_n,'A')
         #Filled up with A,
         #Now turn some of them into B
-        for i in range(len(all_particles)):
-            if np.random.random() > rho:
+        for i in range(ptc_n):
+            if np.random.random() > fa:
                 all_particles[i] = "B"
+        all_particles = iter(all_particles)
+
+        #Putting the particles in grid
+        all_positions = np.indices((nx,nx)).reshape(2,-1).T  #a pool of positions in indexl [x,y]
+        np.random.shuffle(all_positions)  #shuffle the pool
+        for i in all_positions[:ptc_n]:  #loop in the pool until all particle are filled ([:ptc_n] only keeps the first ptc_n number
+                self.grid[i[0]][i[1]] = next(all_particles)
+
+
 
 
     def map(self):
-        print(self.all_particles)
+        print(self.grid)
+        #plt.imshow(self.grid)
+        #Doesn't work bc self.grid is str array
+        #plt.show()
     
     def energy(self,eps_aa,eps_ab,eps_bb):
         energy = 0
