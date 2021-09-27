@@ -45,32 +45,49 @@ class Lattice:
 
     def energy(self, eps_aa, eps_ab, eps_bb):
         energy = 0
-        # None boundary energy
-        for i in range(len(self.grid) - 1):
-            for j in range(len(self.grid[0]) - 1):
-                if self.grid[i][j] == 1:
+
+        # A check position function is added for ease of periodic boundary conditions
+        def check_position(x,y):
+            if x < 0:
+                x = self.grid_size - x
+            if y < 0:
+                y = self.grid_size - y
+            if x >= self.grid_size:
+                x = x - self.grid_size
+            if y >= self.grid_size:
+                y = y - self.grid_size
+            return self.grid[x][y]
+
+        #This checks positions x = 0...nx-1
+        #Each pair of particle only contribute to energy once, therefore it is sufficient only to check energy for [x+1,y] and [x,y+1]
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[0])):
+                if check_position(i,j) == 1:
                     # Energy if the vertex pair start with type A
-                    if self.grid[i][j + 1] == 1 or self.grid[i + 1][j] == 1:
+                    if check_position(i,j + 1) == 1 or check_position(i + 1,j) == 1:
                         # aa pair for (vx,vy+1) and (vx+1,vy)
                         energy += eps_aa
-                    elif self.grid[i][j + 1] == 2 or self.grid[i + 1][j] == 2:
+                    elif check_position(i,j + 1) == 2 or check_position(i + 1,j) == 2:
                         # ab pair
                         energy += eps_ab
-                elif self.grid[i][j] == 2:
-                    if self.grid[i][j + 1] == 1 or self.grid[i + 1][j] == 1:
+                elif check_position(i,j) == 2:
+                    if check_position(i,j + 1) == 1 or check_position(i + 1,j) == 1:
                         # ba pair
                         energy += eps_ab
-                    elif self.grid[i][j + 1] == 2 or self.grid[i + 1][j] == 2:
+                    elif check_position(i,j + 1) == 2 or check_position(i + 1,j) == 2:
                         # bb pair
                         energy += eps_bb
 
-            # Boundary energy
+
+
 
         return energy
 
 
 
-    # An iterator pool of all possible positions in
+
+
+    # An iterator pool of all possible positions in random order in [[x1,y1],[x2,y2]...]
     def position_pool(self):
         positionpool = np.indices((self.grid_size, self.grid_size)).reshape(2, -1).T
         np.random.shuffle(positionpool)
@@ -81,16 +98,16 @@ class Lattice:
         pool = self.position_pool()
         pre_swap_energy = self.energy(*self.eps)
         while not occupied:
-            position = next(pool)
-            identity = self.grid[position[0]][position[1]]
+            original_position = next(pool)
+            identity = self.grid[original_position[0]][original_position[1]]
             if identity != 0:
                 target_position = next(pool)
                 target_id = self.grid[target_position[0]][target_position[1]]
-                self.grid[position[0]][position[1]] = target_id
+                self.grid[original_position[0]][original_position[1]] = target_id
                 self.grid[target_position[0]][target_position[1]] = identity
                 occupied = True
         if not self.accept():
-            self.grid[position[0]][position[1]] = identity
+            self.grid[original_position[0]][original_position[1]] = identity
             self.grid[target_position[0]][target_position[1]] = target_id
 
 
