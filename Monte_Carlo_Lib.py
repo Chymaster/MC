@@ -11,7 +11,6 @@ class Lattice:
         # Generating empty grid
         self.grid_size = nx
 
-
         # Generate a list of particles
         particle_n = int(rho * (nx ** 2))  # number of particles
         all_particles = np.full(particle_n, 1)
@@ -24,13 +23,14 @@ class Lattice:
 
         # Grid with random particle configuration
         grid = np.zeros((nx, nx), int)
-        all_positions = np.indices((nx, nx)).reshape(2, -1).T  # a pool of positions in index [x,y]
+        all_positions = np.indices((nx, nx)).reshape(
+            2, -1).T  # a pool of positions in index [x,y]
         np.random.shuffle(all_positions)  # shuffle the pool
-        for i in all_positions[:particle_n]:  # loop in the pool until all particle are filled ([:particle_n] only keeps the first particle_n number
+        # loop in the pool until all particle are filled ([:particle_n] only keeps the first particle_n number
+        for i in all_positions[:particle_n]:
             grid[i[0]][i[1]] = next(all_particles)
 
         self.grid = grid
-
 
     def energy(self, eps_aa, eps_ab, eps_bb):
         energy = 0
@@ -51,7 +51,7 @@ class Lattice:
         #Each pair of particle only contribute to energy once, therefore it is sufficient only to check energy for [x+1,y] and [x,y+1]
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                if check_position(i,j) == 1:
+                if check_position(i, j) == 1:
                     # Energy if the vertex pair start with type A
                     if check_position(i, j+1) == 1 or check_position(i+1, j) == 1:
                         # aa pair for (vx,vy+1) and (vx+1,vy)
@@ -60,25 +60,20 @@ class Lattice:
                         # ab pair
                         energy += eps_ab
                 elif check_position(i, j) == 2:
-                    if check_position(i,j+1) == 1 or check_position(i+1, j) == 1:
+                    if check_position(i, j+1) == 1 or check_position(i+1, j) == 1:
                         # ba pair
                         energy += eps_ab
-                    elif check_position(i,j + 1) == 2 or check_position(i + 1,j) == 2:
+                    elif check_position(i, j + 1) == 2 or check_position(i + 1, j) == 2:
                         # bb pair
                         energy += eps_bb
 
-
-
-
         return energy
 
-
-
-
-
     # An iterator pool of all possible positions in random order in [[x1,y1],[x2,y2]...]
+
     def position_pool(self):
-        positionpool = np.indices((self.grid_size, self.grid_size)).reshape(2, -1).T
+        positionpool = np.indices(
+            (self.grid_size, self.grid_size)).reshape(2, -1).T
         np.random.shuffle(positionpool)
         return iter(positionpool)
 
@@ -92,20 +87,19 @@ class Lattice:
             if identity != 0:
                 target_position = next(pool)
                 target_id = self.grid[target_position[0]][target_position[1]]
-                self.grid[original_position[0]][original_position[1]] = target_id
+                self.grid[original_position[0]
+                          ][original_position[1]] = target_id
                 self.grid[target_position[0]][target_position[1]] = identity
                 occupied = True
         if not self.accept():
             self.grid[original_position[0]][original_position[1]] = identity
             self.grid[target_position[0]][target_position[1]] = target_id
 
-
     # monte carlo algorithm
+
     def accept(self):
 
         return True
-
-
 
     def map(self):
         import matplotlib.patches as mpatches
@@ -114,8 +108,10 @@ class Lattice:
         im = plt.imshow(self.grid)
         colors = [im.cmap(im.norm(value)) for value in [0, 1, 2]]
         patches = [mpatches.Patch(color=colors[0], label="Empty".format(l=0)),
-                   mpatches.Patch(color=colors[1], label="Particle A".format(l=1)),
+                   mpatches.Patch(color=colors[1],
+                                  label="Particle A".format(l=1)),
                    mpatches.Patch(color=colors[2], label="Particle B".format(l=2))]
-        plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        plt.legend(handles=patches, bbox_to_anchor=(
+            1.05, 1), loc=2, borderaxespad=0.)
 
         plt.show()
